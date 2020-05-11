@@ -7,3 +7,7 @@
 <img src="https://github.com/425776024/NSGA-II/blob/master/img/Figure_SCH.png?raw=true"/> <br />
 ### ZDT1: 
 <img src="https://github.com/425776024/NSGA-II/blob/master/img/Figure_ZDT1.png?raw=true" /> <br />
+
+
+### ----2020.05.11超过20 star----
+😭我会在1个月之内更新的，更好的结构，更全的解释。
