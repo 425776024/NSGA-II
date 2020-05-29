@@ -15,8 +15,3 @@
 >
 > pip install numpy
 
-
-### run
-```shell
-python src/run_NSGA_TWO.py
-```
