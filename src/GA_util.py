@@ -5,13 +5,16 @@ import src.problem.ZDT2 as ZDT2
 import src.problem.ZDT4 as ZDT4
 
 '''
-遗传算法部分
+遗传算法的一些辅助操作
 '''
+# 交叉率
 c_rate = 0.8
+# 突变了
 m_rate = 0.2
+# 测试函数/基于你自己的应用修改
 test_fun = ZDT4
-
-idv = -1
+# 个体/class Individual 对象
+idv = None
 
 
 def cross(p1, p2):
@@ -50,6 +53,6 @@ def select(P):
         if ip.p_rank <= 3:
             new_P.append(ip)
     while len(new_P) != len(P):
-        p=idv.creat_one()
+        p = idv.creat_one()
         new_P.append(p)
     return P

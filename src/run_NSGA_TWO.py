@@ -1,16 +1,22 @@
 from src.Populations import *
-import src.GA as ga
+import src.GA_util as ga
 from src.Individual import *
 import matplotlib.pyplot as plt
 
 
 class NSGA_II:
-    max_evo = 500
+    # 进化轮数
+    max_evo = 50
+    # 支配前沿
     pareto_f = []
+    # 种群数组
     Pop = []
+    # 对Pop进化一代，组成下一代Qt
     Qt = []
+    # Pop+Qt后去支配排序的
     Rt = []
-    populations = -1
+    # 种群操作类
+    populations = None
 
     def __init__(self):
         self.populations = Population()
@@ -53,6 +59,7 @@ class NSGA_II:
         return F1
 
     def is_dominate(self, a, b):
+        # a是否支配b
         a_f = a.F_value
         b_f = b.F_value
         i = 0
@@ -99,6 +106,7 @@ class NSGA_II:
         return Fi
 
     def inv_append(self, idx, P, to):
+        # 把P中idx的索引的添加到to中去
         for i in idx:
             to.append(P[i])
 
@@ -106,34 +114,39 @@ class NSGA_II:
         # Pt，Qt父子代种群集,ndarray
         gen = 0
         while gen < self.max_evo:
-            # if gen==self.max_evo-2:
-            #     print(self.pareto_f)
             gen += 1
+            # Rt：前面种群+前面种群进化一轮后的总的个体
             self.Rt = []
+            # 前面种群self.Pop进化一轮，变成新种群self.Qt
             self.Qt = self.populations.next_Pop(self.Pop)
+            # 全部合并到self.Rt
             self.append(self.Pop, self.Rt)
             self.append(self.Qt, self.Rt)
             # 找到前沿层F1,F2,....
             F = self.fast_nodominate_sort(self.Rt)
+            # pareto前沿
             self.pareto_f = []
-            # 保留pareto前沿
+            # self.Rt中的第0层（F[0]）（pareto前沿层），放到self.pareto_f
             self.inv_append(F[0], self.Rt, self.pareto_f)
             print('%s th pareto len %s:' % (gen, len(F[0])))
-            # 保留前沿层最好的popsize个
             Pt_next = []
             i = 0
+            # 保留前沿层最好的popsize个，组成下一代种群Pt_next
             while (len(Pt_next) + len(F[i])) <= self.populations.pop_size:
                 self.inv_append(F[i], self.Rt, Pt_next)
                 i += 1
-            # self.crowding_dist(Fi)
+
             Fi = []
+            # 把最后一层加上来。管它先排个位置
             self.inv_append(F[i], self.Rt, Fi)
             for ip in Fi:
                 Pt_next.append(ip)
+            # 你们上面随便排位置，反正我最后只取前pop_size个组成下一代
             Pt_next = Pt_next[0:self.populations.pop_size]
             self.Pop = Pt_next
 
     def append(self, fro, to):
+        # 添加函数
         for i in range(len(fro)):
             to.append(fro[i])
 
@@ -141,8 +154,7 @@ class NSGA_II:
 
         pf1_data = []
         pf2_data = []
-        # if len(self.pareto_f)>self.populations.pop_size:
-        #     self.pareto_f=self.pareto_f[0:self.populations.pop_size]
+
         for p in self.pareto_f:
             pf1_data.append(p.F_value[0])
             pf2_data.append(p.F_value[1])
@@ -154,8 +166,7 @@ class NSGA_II:
         plt.xlabel('Function 1', fontsize=15)
         plt.ylabel('Function 2', fontsize=15)
         plt.title('ZDT4')
-        # plt.xlim(min(pf1_data), max(pf1_data))
-        # plt.ylim(min(pf2_data), max(pf2_data))
+
         plt.scatter(f1_data, f2_data, c='black', s=5)
         plt.scatter(pf1_data, pf2_data, c='red', s=10)
         plt.show()

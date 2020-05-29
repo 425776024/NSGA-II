@@ -1,5 +1,5 @@
 from src.Individual import *
-from src.GA import *
+from src.GA_util import *
 
 
 class Population:
