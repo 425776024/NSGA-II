@@ -55,4 +55,4 @@ def select(P):
     while len(new_P) != len(P):
         p = idv.creat_one()
         new_P.append(p)
-    return P
+    return new_P
